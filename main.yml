@@ -1,0 +1,10 @@
+---
+# This playbook deploys the whole work machine
+
+- name: Apply common configuration 
+  hosts: all
+  roles:
+    - common
+  tags:
+    - configuration
+    - pre

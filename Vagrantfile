@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "main.yml"
-    ansible.inventory_path = "hosts-vagrant"
+    ansible.inventory_path = "hosts-dev"
     ansible.verbose = "v"
     ansible.host_key_checking = false
     #ansible.extra_vars = { 

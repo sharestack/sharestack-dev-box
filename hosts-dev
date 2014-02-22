@@ -1,0 +1,17 @@
+[webservers]
+192.168.100.45
+
+[dbservers]
+192.168.100.45
+
+[searchservers]
+192.168.100.45
+
+[lbservers]
+192.168.100.45
+
+[vagrant:children]
+webservers
+dbservers
+searchservers
+lbservers

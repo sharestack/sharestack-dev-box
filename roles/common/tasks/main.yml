@@ -1,0 +1,9 @@
+---
+
+# This role contains the common configuration adn prerequisites of the machine
+
+- name: Set The ssh key
+  copy: src={{ private_key }} dest=~/.ssh/id_rsa mode=0600
+  tags:
+    - id_rsa
+    - ssh

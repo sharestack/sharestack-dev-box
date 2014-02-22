@@ -1,0 +1,3 @@
+
+# The private ssh private key for the provisioned machines
+private_key: ~/.ssh/id_rsa

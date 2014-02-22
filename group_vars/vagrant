@@ -1,0 +1,7 @@
+
+# the working user for the dev machine
+working_user: "vagrant"
+
+# settings for ansible to connect to the vagrant machine
+ansible_ssh_user: "vagrant"
+ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
