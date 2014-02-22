@@ -1,4 +1,7 @@
-# Python settings for project
+# Python settings for web application
+
+pyenv_tag_version: v{{pyenv_version}}
+pyenv_version: 0.4.0-20140211
 pyenv_python_versions:
   - 2.7.6
   - 3.3.4

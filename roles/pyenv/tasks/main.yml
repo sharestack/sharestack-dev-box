@@ -1,0 +1,88 @@
+
+- name: check python compiling dependencies
+  apt:  pkg={{ item }}
+  when: ansible_os_family == "Debian"
+  sudo: True
+  with_items:
+    - build-essential
+    - libbz2-dev
+    - libncursesw5-dev
+    - libreadline-dev
+    - libssl-dev
+    - libgdbm-dev
+    - libc6-dev
+    - libsqlite3-dev
+    - tk-dev
+    - liblzma-dev
+
+- name: check pyenv installed
+  stat: path=~/.pyenv
+  register: pyenv_exists
+  changed_when: "pyenv_exists.stat.exists == false"
+  tags:
+    - pyenv
+
+- name: check pyenv correct version
+  shell: "~/.pyenv/bin/pyenv --version"
+  register: installed_pyenv_version
+  when: "pyenv_exists.stat.exists == true"
+  # We need XXXXXXX for version instead of vxxxxxxx like the tag so we use the 
+  # list operators
+  #changed_when: "pyenvversion.stdout.find(pyenv_tag_version[1:]) == -1" 
+  changed_when: "installed_pyenv_version.stdout.find(pyenv_version) == -1"
+  tags:
+    - pyenv
+
+# Only delete when incorrect version
+- name: delete pyenv
+  file: 
+    path=~/.pyenv
+    state=absent
+  register: deleted_pyenv
+  when: "pyenv_exists.stat.exists == true and installed_pyenv_version.stdout.find(pyenv_version) == -1"
+  tags:
+    - pyenv
+
+# Only install when no .pyenv (previous tasks will do the dirty job of
+# deletion if needed)
+- name: install pyenv
+  git:
+    repo=git://github.com/yyuu/pyenv.git
+    dest=~/.pyenv
+    version={{ pyenv_tag_version }}
+  # Install when deleted or not present
+  when: "deleted_pyenv.changed or pyenv_exists.stat.exists == false"
+  tags:
+    - pyenv
+
+#- debug: msg="Pyenv version {{ pyenv_version }} & pyenv tag version {{ pyenv_tag_version }}"
+
+- name: check python correct versions
+  # return only the not installed versions so we create a custom list for
+  # installing the missing python versions when calling our handler
+  shell: "~/.pyenv/bin/pyenv versions"
+  register: installed_pyenv_python_versions
+  # Mark as changed the ones that need to be installed (afterwards handler will install)
+  changed_when: "installed_pyenv_python_versions.stdout.find(item) == -1"
+  notify: install python versions in pyenv
+  with_items: pyenv_python_versions
+  tags:
+    - pyenv
+
+- name: add pyenv env vars
+  lineinfile: dest=~/.bashrc line="{{ item }}"
+  # yeah we could do this with a whole template, but for role decouple is better
+  with_items:
+    - export PYENV_ROOT="$HOME/.pyenv"
+    - export PATH="$PYENV_ROOT/bin:$PATH"
+    - eval \"$(pyenv init -)\"
+  tags:
+    - pyenv
+
+- name: check python default version
+  shell: "~/.pyenv/bin/pyenv global"
+  register: system_python_default
+  changed_when: "system_python_default.stdout.find(default_python) == -1"
+  notify: set python default version
+  tags:
+    - pyenv

@@ -8,3 +8,11 @@
   tags:
     - configuration
     - pre
+
+- name: Install pyenv 
+  hosts: webservers
+  roles:
+    - pyenv
+  tags:
+    - python
+    - pyenv

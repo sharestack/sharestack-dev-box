@@ -12,3 +12,5 @@
   apt: pkg=git
   when: ansible_os_family == "Debian"
   sudo: True
+  tags:
+    - git
