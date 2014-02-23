@@ -1,12 +1,20 @@
+---
+
 - name: install python versions in pyenv
   shell: ~/.pyenv/bin/pyenv install {{ item.item }}
   # Only install the versions that aren't installed
   when: item.changed
   with_items: installed_pyenv_python_versions.results
+  notify: rehash after installation
   tags:
     - pyenv
 
 - name: set python default version
   shell: "~/.pyenv/bin/pyenv global {{ default_python }}"
+  tags:
+    - pyenv
+
+- name: rehash after installation
+  shell: "~/.pyenv/bin/pyenv rehash"
   tags:
     - pyenv

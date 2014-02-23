@@ -1,3 +1,4 @@
+---
 
 - name: check python compiling dependencies
   apt:  pkg={{ item }}
