@@ -16,3 +16,12 @@
   tags:
     - python
     - pyenv
+
+- name: Install virtualenv
+  hosts: webservers
+  roles:
+    - virtualenv
+  sudo: true
+  tags:
+    - python
+    - virtualenv

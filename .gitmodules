@@ -1,0 +1,3 @@
+[submodule "roles/virtualenv"]
+	path = roles/virtualenv
+	url = https://github.com/brad/ansible-virtualenv
