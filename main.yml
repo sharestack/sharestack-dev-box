@@ -25,3 +25,12 @@
   tags:
     - python
     - virtualenv
+
+- name: Install Postgres
+  hosts: dbservers
+  roles:
+    - postgresql
+  sudo: true
+  tags:
+    - db
+    - postgresql

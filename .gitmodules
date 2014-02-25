@@ -1,3 +1,6 @@
 [submodule "roles/virtualenv"]
 	path = roles/virtualenv
 	url = https://github.com/brad/ansible-virtualenv
+[submodule "roles/postgresql"]
+	path = roles/postgresql
+	url = https://github.com/zzet/ansible-postgresql-role
